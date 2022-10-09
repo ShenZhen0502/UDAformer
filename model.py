@@ -2,9 +2,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from pdb import set_trace as stx
 import numbers
-from pytorch_wavelets import DWT, IDWT
 import numpy as np
 from einops import rearrange
 
@@ -127,7 +125,6 @@ class SWPSA(nn.Module):
 
     def window_partitions(self,x, window_size: int):
         """
-        将feature map按照window_size划分成一个个没有重叠的window
         Args:
             x: (B, H, W, C)
             window_size (int): window size(M)
@@ -137,19 +134,14 @@ class SWPSA(nn.Module):
         """
         B, H, W, C = x.shape
         x = x.view(B, H // window_size, window_size, W // window_size, window_size, C)
-        # permute: [B, H//Mh, Mh, W//Mw, Mw, C] -> [B, H//Mh, W//Mh, Mw, Mw, C]
-        # view: [B, H//Mh, W//Mw, Mh, Mw, C] -> [B*num_windows, Mh, Mw, C]
         windows = x.permute(0, 1, 3, 2, 4, 5).contiguous().view(-1, window_size, window_size, C)
         return windows
 
     def create_mask(self, x):
-        # calculate attention mask for SW-MSA
-        # 保证Hp和Wp是window_size的整数倍
-        n,c,H,W = x.shape
 
+        n,c,H,W = x.shape
         Hp = int(np.ceil(H / self.window_size)) * self.window_size
         Wp = int(np.ceil(W / self.window_size)) * self.window_size
-        # 拥有和feature map一样的通道排列顺序，方便后续window_partition
         img_mask = torch.zeros((1, Hp, Wp, 1), device=x.device)  # [1, Hp, Wp, 1]
         h_slices = (slice(0, -self.window_size),
                     slice(-self.window_size, -self.shift_size),
@@ -185,17 +177,11 @@ class SWPSA(nn.Module):
 
         q = torch.nn.functional.normalize(q, dim=-1)
         k = torch.nn.functional.normalize(k, dim=-1)
-
         attn = (q.transpose(-2,-1) @ k)/self.window_size
         attn = attn.softmax(dim=-1)
-
         out = (v @ attn )
-        #
         out = rearrange(out, 'b c (h w) -> b c h w', h=int(self.window_size),
                         w=int(self.window_size))
-
-
-
         out = self.project_out(out)
         out = window_reverse(out,self.window_size,h,w)
 
@@ -415,7 +401,7 @@ class Downsample(nn.Module):
     def forward(self, x):
         _, _, h, w = x.shape
         if h % 2 != 0:
-            x = F.pad(x, [0, 0, 1, 0])  # 左右上下的顺序
+            x = F.pad(x, [0, 0, 1, 0])
         if w % 2 != 0:
             x = F.pad(x, [1, 0, 0, 0])
         return self.body(x)
@@ -429,7 +415,7 @@ class Upsample(nn.Module):
     def forward(self, x):
         _, _, h, w = x.shape
         if h % 2 != 0:
-            x = F.pad(x, [0, 0, 1, 0])  # 左右上下的顺序
+            x = F.pad(x, [0, 0, 1, 0])
         if w % 2 != 0:
             x = F.pad(x, [1, 0, 0, 0])
         return self.body(x)

@@ -6,7 +6,7 @@ This repository is the official PyTorch implementation of UDAformer: underwater 
 
 *Underwater images suffer from seriously degraded due to wavelength-dependent light scatter and abortion of the underwater environment, which impacts the application of high-level computer vision tasks. Considering the characteristics of uneven degradation and loss of color channel of underwater images, a novel underwater image enhancement method, namely UDAformer, based on Dual Attention Transformer Block (DATB), including Channel Self-Attention Transformer (CSAT) and Shifted Window Pixel SelfAttention Transformer (SW-PSAT), is proposed. Specifically, the underwater image enhancement based on channel self-attention alone is not necessarily sufficient due to the severe and uneven degradation of underwater images. Therefore, a novel fusion method combining channel and pixel self-attention is proposed for efficient encoding and decoding of underwater image features. Then, the shifted window method for the pixel self-attention is proposed to improve computational efficiency. Further, convolution is constructed to calculate the self-attention weight matrix so that the proposed UDAformer can flexibly process input images of various resolutions and reduce network parameters. Finally, the underwater images are recovered through the design of skip connections based on the underwater imaging model. Experimental results demonstrate the proposed UDAformer surpasses previous state-of-the-art methods, both qualitatively and quantitatively.*
 
-![](.\figures\overall.png)
+![](https://github.com/sz19980502/UDAformer/blob/main/figures/overall.png)
 
 ------
 

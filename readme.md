@@ -26,7 +26,7 @@ Run train.py, the model weight will automatilly save in checkpoint folder. In or
 
 #### Testing
 
-Put the model weight into checkpoint folder, and run test.py.  
+Put the model weight into checkpoint folder, and run test.py.  The model weight is uploaded to [Google Drive](https://drive.google.com/drive/folders/13ehthtYe7GSnQWaTZsnTa2n_08RNlF22) 
 
 After run the test.py, you can see the result in results folder.
 

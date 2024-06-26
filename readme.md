@@ -33,11 +33,14 @@ After run the test.py, you can see the result in results folder.
 #### Citation
 
 ```
-@article{shen2022udaformer,
-  title={UDAformer: Underwater image enhancement based on dual attention transformer},
+@article{shen2023udaformer,
+  title={UDAformer: underwater image enhancement based on dual attention transformer},
   author={Shen, Zhen and Xu, Haiyong and Luo, Ting and Song, Yang and He, Zhouyan},
-  journal={Available at SSRN 4162641},
-  year={2022}
+  journal={Computers \& Graphics},
+  volume={111},
+  pages={77--88},
+  year={2023},
+  publisher={Elsevier}
 }
 ```
 
